@@ -50,7 +50,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                # 'django.contrib.messages.context_processors.messages',
+                'django.contrib.messages.context_processors.messages', # раньше он был закоменчен
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
@@ -86,11 +86,15 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'pybb.apps.PybbConfig',
     'sorl.thumbnail',
-    'pure_pagination',
+    #'pure_pagination',
     'account',
-    'pinax_theme_bootstrap',
-    'bootstrapform',
+    #'pinax_theme_bootstrap',
+    #'bootstrapform',
     'captcha',
+    #'crispy_forms',
+    'rangefilter',
+    'bootstrap4',
+
 )
 
 AUTH_PROFILE_MODULE = 'pybb.Profile'

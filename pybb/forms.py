@@ -8,9 +8,10 @@ from django.core.exceptions import FieldError, PermissionDenied
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.utils.decorators import method_decorator
 from django.utils.text import Truncator
-from django.utils.translation import ugettext, ugettext_lazy
+from django.utils.translation import gettext_lazy as ugettext_lazy
 from django.utils.timezone import now as tznow
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as ugettext
+from django.utils.translation import gettext as _
 
 from pybb import compat, defaults, util, permissions
 from pybb.models import Topic, Post, Attachment, PollAnswer, \
@@ -74,7 +75,7 @@ class PostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         # Move args to kwargs
         if args:
-            kwargs.update(dict(zip(inspect.getargspec(super(PostForm, self).__init__)[0][1:], args)))
+            kwargs.update(dict(zip(inspect.getfullargspec(super(PostForm, self).__init__)[0][1:], args)))
         self.user = kwargs.pop('user', None)
         self.ip = kwargs.pop('ip', None)
         self.topic = kwargs.pop('topic', None)
@@ -300,7 +301,7 @@ class AdminPostForm(PostForm):
 
     def __init__(self, *args, **kwargs):
         if args:
-            kwargs.update(dict(zip(inspect.getargspec(forms.ModelForm.__init__)[0][1:], args)))
+            kwargs.update(dict(zip(inspect.getfullargspec(forms.ModelForm.__init__)[0][1:], args)))
         if 'instance' in kwargs and kwargs['instance']:
             kwargs.setdefault('initial', {}).update({'login': getattr(kwargs['instance'].user, username_field)})
         super(AdminPostForm, self).__init__(**kwargs)

@@ -1,18 +1,17 @@
 
 from django.core.exceptions import ValidationError
+from django.db.models import OneToOneField
 from django.urls import reverse
 from django.db import models, transaction, DatabaseError
 from django.utils.functional import cached_property
 from django.utils.html import strip_tags
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now as tznow
 
 from pybb.compat import get_user_model_path, get_username_field, get_atomic_func, slugify
 from pybb import defaults
 from pybb.profiles import PybbProfile
 from pybb.util import unescape, FilePathGenerator, _get_markup_formatter
-
-from annoying.fields import AutoOneToOneField
 
 
 class Category(models.Model):
@@ -223,12 +222,15 @@ class Topic(models.Model):
 
         forum_changed = False
         old_topic = None
+
+        super(Topic, self).save(*args, **kwargs)
+
         if self.id is not None:
             old_topic = Topic.objects.get(id=self.id)
             if self.forum != old_topic.forum:
                 forum_changed = True
 
-        super(Topic, self).save(*args, **kwargs)
+        #super(Topic, self).save(*args, **kwargs)
 
         if forum_changed:
             old_topic.forum.update_counters()
@@ -361,7 +363,7 @@ class Profile(PybbProfile):
     Profile class that can be used if you doesn't have
     your site profile.
     """
-    user = AutoOneToOneField(
+    user = OneToOneField(
         get_user_model_path(), on_delete=models.CASCADE,
         related_name='pybb_profile', verbose_name=_('User'))
 

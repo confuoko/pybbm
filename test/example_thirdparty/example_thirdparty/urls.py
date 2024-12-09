@@ -1,9 +1,10 @@
 
 import django
 from account.views import ChangePasswordView, SignupView, LoginView
-from django.conf.urls import include, url
+from django.conf.urls import include
+from django.urls import re_path as url
 from django.contrib import admin
-from example_thirdparty.forms import SignupFormWithCaptcha
+from .forms import SignupFormWithCaptcha
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls) if django.VERSION < (1, 10) else admin.site.urls),

@@ -32,7 +32,7 @@ class MarkdownParser(BaseParser):
     widget_class = MarkdownWidget
 
     def __init__(self):
-        self._parser = Markdown(safe_mode='escape')
+        self._parser = Markdown() #Начиная с Markdodn==3.0.0, аргумент safe_mode был удален
 
     def format(self, text, instance=None):
         if instance and instance.pk:

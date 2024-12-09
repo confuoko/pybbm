@@ -41,7 +41,7 @@ class BaseParser(object):
         :returns: str or unicode with [file-\d+] replaced by related file's (web) URL
         """
 
-        refs = re.findall( '\[file-([1-9][0-9]*)\]', text)
+        refs = re.findall( '\[file-([1-9][0-9]*)]', text)
         if not refs:
             return text
         refs = sorted(set(refs))

@@ -7,7 +7,6 @@ Mandatory dependencies
 PyBBM requires the following packages:
 
 * django
-* django-annoying
 * unidecode (for slugifying instances for nicer urls)
 
 

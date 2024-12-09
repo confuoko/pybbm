@@ -11,7 +11,7 @@ from django.forms.utils import ErrorList
 from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseBadRequest,\
     HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import ModelFormMixin
@@ -458,13 +458,16 @@ class PostEditMixin(PybbFormsMixin):
                         success = False
                 else:
                     topic.poll_question = None
+                    # Сохраняем topic перед доступом к poll_answers
+                    topic.save()
                     topic.poll_answers.all().delete()
         else:
             pollformset = None
 
         if success:
             try:
-                topic.save()
+                if not topic.pk:
+                    topic.save()
             except ValidationError as e:
                 success = False
                 errors = form._errors.setdefault('name', ErrorList())
@@ -531,6 +534,11 @@ class AddPostView(PostEditMixin, generic.CreateView):
     def get_form_kwargs(self):
         ip = self.request.META.get('REMOTE_ADDR', '')
         form_kwargs = super(AddPostView, self).get_form_kwargs()
+
+        # ValueError: 'Topic' instance needs to have a primary key value before this relationship can be used
+        if self.topic and not self.topic.pk:
+            self.topic.save()
+
         form_kwargs.update(dict(topic=self.topic, forum=self.forum, user=self.user,
                            ip=ip, initial={}))
         if getattr(self, 'quote', None):
